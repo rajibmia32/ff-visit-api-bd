@@ -1,0 +1,43 @@
+name: Update Tokens
+
+on:
+  schedule:
+    - cron: '30 */5 * * *'  # প্রতি ৫ ঘণ্টা পরপর রান হবে
+  workflow_dispatch:  # ম্যানুয়ালি রান করার অপশন
+
+jobs:
+  update-tokens:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests aiohttp
+
+      - name: Run token update script
+        run: python update_tokens.py
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          
+          # এখানে আবার পরিবর্তন করে tokens.json করে দেওয়া হলো
+          git add tokens.json
+          
+          git diff --quiet && git diff --staged --quiet || (
+            git commit -m "Update tokens [automated]" && \
+            git pull --rebase origin main && \
+            git push origin main
+          )
