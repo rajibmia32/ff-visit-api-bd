@@ -4,7 +4,7 @@ import asyncio
 import aiohttp
 
 UIDPASS_FILE = "uidpass.json"
-TOKEN_FILE = "tokens.json"
+TOKEN_FILE = "token_bd.json"
 API_URL = "https://jwttoken-ten.vercel.app/token"
 
 # একসাথে সর্বোচ্চ কয়টি রিকোয়েস্ট যাবে (৮৫০০ অ্যাকাউন্টের জন্য ৫০টি করে ব্যাচ বেস্ট)
